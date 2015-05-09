@@ -1,5 +1,6 @@
 package com.jim.instagramclientandroid;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.jim.instagramclientandroid.api.model.beans.Photo;
 import com.jim.instagramclientandroid.api.model.beans.PopularMediasResult;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -32,7 +34,9 @@ public class PhotosActivity extends ActionBarActivity {
   @InjectView(R.id.lvPhotos)
   ListView mLvPhotos;
 
-  private List<Photo> photos;
+  @InjectView(R.id.swipeContainer)
+  SwipeRefreshLayout swipeContainer;
+
   private PhotosAdapter photosAdapter;
 
   @Override
@@ -43,8 +47,23 @@ public class PhotosActivity extends ActionBarActivity {
     ButterKnife.inject(this);
     Fresco.initialize(this);
 
-    photos = new ArrayList<Photo>();
-    photosAdapter = new PhotosAdapter(this, photos);
+    // Setup refresh listener which triggers new data loading
+    swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        // Your code to refresh the list here.
+        // Make sure you call swipeContainer.setRefreshing(false)
+        // once the network request has completed successfully.
+        fetchPhotosAsync(0);
+      }
+    });
+    // Configure the refreshing colors
+    swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light);
+
+    photosAdapter = new PhotosAdapter(this, new ArrayList<Photo>());
     mLvPhotos.setAdapter(photosAdapter);
 
     restAdapter = new RestAdapter.Builder()
@@ -52,17 +71,26 @@ public class PhotosActivity extends ActionBarActivity {
             .build();
 
     instagramApi = restAdapter.create(InstagramApi.class);
+
+    fetchPhotosAsync(0);
+  }
+
+  private void fetchPhotosAsync(long id) {
     instagramApi.getPopularMedias(INSTAGRAM_CLIENT_ID, new Callback<PopularMediasResult>() {
       @Override
       public void success(PopularMediasResult popularMediasResult, Response response) {
         Log.d(TAG, "Got popular medias : " + popularMediasResult);
-        photos.addAll(popularMediasResult.getData());
+        photosAdapter.clear();
+        photosAdapter.addAll(popularMediasResult.getData());
         photosAdapter.notifyDataSetChanged();
+
+        swipeContainer.setRefreshing(false);
       }
 
       @Override
       public void failure(RetrofitError error) {
         Log.e(TAG, "Failed to get popular medias : " + error);
+        swipeContainer.setRefreshing(false);
       }
     });
   }
