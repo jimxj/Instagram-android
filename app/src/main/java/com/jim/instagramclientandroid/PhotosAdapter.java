@@ -4,6 +4,7 @@
 package com.jim.instagramclientandroid;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jim.instagramclientandroid.api.model.beans.Photo;
 import com.squareup.picasso.Picasso;
 
@@ -33,17 +35,22 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
     tvUserName.setText(photo.getUser().getFull_name());
 
-    ImageView userProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-    Picasso.with(getContext())
-            .load(photo.getUser().getProfile_picture())
-            .resize(40, 40)
-            .centerCrop()
-            .into(userProfileImage);
+//    ImageView userProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+//    Picasso.with(getContext())
+//            .load(photo.getUser().getProfile_picture())
+//            .resize(40, 40)
+//            .centerCrop()
+//            .into(userProfileImage);
+    SimpleDraweeView userProfileImage = (SimpleDraweeView) convertView.findViewById(R.id.ivProfileImage);
+    userProfileImage.setImageURI(Uri.parse(photo.getUser().getProfile_picture()));
 
-    ImageView photoImage = (ImageView) convertView.findViewById(R.id.ivPhoto);
-    Picasso.with(getContext())
-            .load(photo.getImages().getStandard_resolution().getUrl())
-            .into(photoImage);
+    SimpleDraweeView postImage = (SimpleDraweeView) convertView.findViewById(R.id.ivPhoto);
+    postImage.setImageURI(Uri.parse(photo.getImages().getStandard_resolution().getUrl()));
+
+//    ImageView photoImage = (ImageView) convertView.findViewById(R.id.ivPhoto);
+//    Picasso.with(getContext())
+//            .load(photo.getImages().getStandard_resolution().getUrl())
+//            .into(photoImage);
 
     return convertView;
   }

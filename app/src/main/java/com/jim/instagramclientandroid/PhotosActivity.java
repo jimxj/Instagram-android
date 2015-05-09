@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jim.instagramclientandroid.api.InstagramApi;
 import com.jim.instagramclientandroid.api.model.beans.Photo;
 import com.jim.instagramclientandroid.api.model.beans.PopularMediasResult;
@@ -40,6 +41,7 @@ public class PhotosActivity extends ActionBarActivity {
     setContentView(R.layout.activity_photos);
 
     ButterKnife.inject(this);
+    Fresco.initialize(this);
 
     photos = new ArrayList<Photo>();
     photosAdapter = new PhotosAdapter(this, photos);
