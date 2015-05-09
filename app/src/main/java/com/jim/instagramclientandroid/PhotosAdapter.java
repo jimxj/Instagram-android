@@ -32,8 +32,17 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
     }
 
+    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
+    tvTime.setText(Utils.toRelativeTime(photo.getCreated_time()));
+
     TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
     tvUserName.setText(photo.getUser().getFull_name());
+
+    TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikeNum);
+    tvLikes.setText(Utils.formatInt(photo.getLikes().getCount()));
+
+    TextView tvViewAllComments = (TextView) convertView.findViewById(R.id.tvViewAllComments);
+    tvViewAllComments.setText("View all " + Utils.formatInt(photo.getComments().getCount()) + " comments");
 
 //    ImageView userProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
 //    Picasso.with(getContext())
