@@ -9,16 +9,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jim.instagramclientandroid.api.model.beans.Photo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class PhotosAdapter extends ArrayAdapter<Photo> {
+  // View lookup cache
+  private static class ViewHolder {
+    SimpleDraweeView authorImage;
+    TextView userName;
+    TextView postTime;
+    SimpleDraweeView postImage;
+    TextView likes;
+    TextView commentNum;
+  }
+
 
   public PhotosAdapter(Context context, List<Photo> objects) {
     super(context, R.layout.item_photo, objects);
@@ -28,21 +36,28 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
   public View getView(int position, View convertView, ViewGroup parent) {
     Photo photo = getItem(position);
 
+    ViewHolder viewHolder = null;
     if(null == convertView) {
+      viewHolder = new ViewHolder();
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+      viewHolder.authorImage = (SimpleDraweeView) convertView.findViewById(R.id.ivProfileImage);
+      viewHolder.userName = (TextView) convertView.findViewById(R.id.tvUserName);
+      viewHolder.postTime = (TextView) convertView.findViewById(R.id.tvTime);
+      viewHolder.postImage = (SimpleDraweeView) convertView.findViewById(R.id.ivPhoto);
+      viewHolder.likes = (TextView) convertView.findViewById(R.id.tvLikeNum);
+      viewHolder.commentNum = (TextView) convertView.findViewById(R.id.tvViewAllComments);
+      convertView.setTag(viewHolder);
+    } else {
+      viewHolder = (ViewHolder) convertView.getTag();
     }
 
-    TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
-    tvTime.setText(Utils.toRelativeTime(photo.getCreated_time()));
+    viewHolder.postTime.setText(Utils.toRelativeTime(photo.getCreated_time()));
 
-    TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-    tvUserName.setText(photo.getUser().getFull_name());
+    viewHolder.userName.setText(photo.getUser().getFull_name());
 
-    TextView tvLikes = (TextView) convertView.findViewById(R.id.tvLikeNum);
-    tvLikes.setText(Utils.formatInt(photo.getLikes().getCount()));
+    viewHolder.likes.setText(Utils.formatInt(photo.getLikes().getCount()));
 
-    TextView tvViewAllComments = (TextView) convertView.findViewById(R.id.tvViewAllComments);
-    tvViewAllComments.setText("View all " + Utils.formatInt(photo.getComments().getCount()) + " comments");
+    viewHolder.commentNum.setText("View all " + Utils.formatInt(photo.getComments().getCount()) + " comments");
 
 //    ImageView userProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
 //    Picasso.with(getContext())
@@ -50,11 +65,9 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
 //            .resize(40, 40)
 //            .centerCrop()
 //            .into(userProfileImage);
-    SimpleDraweeView userProfileImage = (SimpleDraweeView) convertView.findViewById(R.id.ivProfileImage);
-    userProfileImage.setImageURI(Uri.parse(photo.getUser().getProfile_picture()));
+    viewHolder.authorImage.setImageURI(Uri.parse(photo.getUser().getProfile_picture()));
 
-    SimpleDraweeView postImage = (SimpleDraweeView) convertView.findViewById(R.id.ivPhoto);
-    postImage.setImageURI(Uri.parse(photo.getImages().getStandard_resolution().getUrl()));
+    viewHolder.postImage.setImageURI(Uri.parse(photo.getImages().getStandard_resolution().getUrl()));
 
 //    ImageView photoImage = (ImageView) convertView.findViewById(R.id.ivPhoto);
 //    Picasso.with(getContext())
