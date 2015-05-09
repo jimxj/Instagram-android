@@ -47,13 +47,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:paddingLeft="10dp"
+            android:paddingLeft="5dp"
             android:text="jimliu"
             android:id="@+id/tvUserName"
             android:layout_gravity="center_vertical"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/ivProfileImage"
-            android:layout_toEndOf="@+id/ivProfileImage"/>
+            android:layout_toEndOf="@+id/ivProfileImage"
+            android:maxLength="40"/>
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tvTime"
+            android:layout_toStartOf="@+id/tvTime"
+            android:id="@+id/ivClock"
+            android:src="@drawable/clock"/>
 
         <TextView
             android:layout_width="wrap_content"
