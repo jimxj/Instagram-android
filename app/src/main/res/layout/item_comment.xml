@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/rlCommentHeader">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            fresco:roundAsCircle="true"
+            fresco:roundedCornerRadius="10dp"
+            fresco:roundingBorderWidth="1dp"
+            android:id="@+id/ivCommentUserImage"
+            fresco:placeholderImage="@drawable/default_profile_image"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:paddingLeft="5dp"
+            android:text="jimliu"
+            android:id="@+id/tvCommentUserName"
+            android:textColor="@color/userNameBlue"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/ivCommentUserImage"
+            android:layout_toEndOf="@+id/ivCommentUserImage"
+            android:maxLength="40"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="2d"
+            android:id="@+id/tvCommentTime"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/contentDark"
+        android:text="Large Text"
+        android:id="@+id/tvCommentContent"
+        android:layout_marginLeft="25dp"
+        android:layout_below="@+id/rlCommentHeader"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+</RelativeLayout>

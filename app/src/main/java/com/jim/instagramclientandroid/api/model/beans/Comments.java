@@ -39,12 +39,12 @@ public class Comments {
   private Integer count;
 
   
-  private List<Photo> data;
+  private List<Comment> data;
 
   public Integer getCount() {
     return count;
   }
-  public List<Photo> getData() {
+  public List<Comment> getData() {
     return data;
   }
 
@@ -65,7 +65,7 @@ public class Comments {
       toBuild.count = value;
       return this;
     }
-    public CommentsBuilder data(List<Photo> value) {
+    public CommentsBuilder data(List<Comment> value) {
       toBuild.data = value;
       return this;
     }
