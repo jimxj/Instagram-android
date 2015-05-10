@@ -4,7 +4,7 @@ An Android Instagram client
 ## Time spent : 12 hours
 
 ## User Storeis
-* User can scroll through current popular photos from Instagram
+* [X] User can scroll through current popular photos from Instagram
 * For each photo displayed, user can see the following details:
   * Graphic, Caption, Username
   * (Optional) relative timestamp, like count, user profile image
