@@ -21,6 +21,6 @@ An Android Instagram client
 ![Demo](demo.gif)
 
 ##Credits
-R2M : https://github.com/magnetsystems/r2m-plugin-android
-Retrofit : https://github.com/square/retrofit
-Fresco : http://frescolib.org/
+* R2M : https://github.com/magnetsystems/r2m-plugin-android
+* Retrofit : https://github.com/square/retrofit
+* Fresco : http://frescolib.org/
