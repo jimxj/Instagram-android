@@ -67,7 +67,7 @@ public class CommentsDialogFragment extends DialogFragment {
     View view = inflater.inflate(R.layout.fragement_comments, container);
     lvComments = (ListView) view.findViewById(R.id.lvComments);
     lvComments.setDivider(new ColorDrawable(Color.WHITE));
-    lvComments.setDividerHeight(5);
+    lvComments.setDividerHeight(10);
 
     List<Comment> comments = getArguments().getParcelableArrayList(KEY_COMMENTS);
     CommentAdapter commentAdapter = new CommentAdapter(getActivity(), comments);
