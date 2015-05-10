@@ -21,6 +21,8 @@ import com.jim.instagramclientandroid.api.model.beans.Comment;
 import com.jim.instagramclientandroid.api.model.beans.MediaCommentsResult;
 import com.jim.instagramclientandroid.api.model.beans.Photo;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
   public static final String TAG = "PhotosAdapter";
   // View lookup cache
   private static class ViewHolder {
+    TextView caption;
     SimpleDraweeView authorImage;
     TextView userName;
     TextView postTime;
@@ -56,37 +59,14 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     if(null == convertView) {
       viewHolder = new ViewHolder();
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+
+      viewHolder.caption = (TextView) convertView.findViewById(R.id.tvCaption);
       viewHolder.authorImage = (SimpleDraweeView) convertView.findViewById(R.id.ivProfileImage);
       viewHolder.userName = (TextView) convertView.findViewById(R.id.tvUserName);
       viewHolder.postTime = (TextView) convertView.findViewById(R.id.tvTime);
       viewHolder.postImage = (SimpleDraweeView) convertView.findViewById(R.id.ivPhoto);
       viewHolder.likes = (TextView) convertView.findViewById(R.id.tvLikeNum);
       viewHolder.commentNum = (TextView) convertView.findViewById(R.id.tvViewAllComments);
-      viewHolder.commentNum.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          instagramApi.getMediaComments(photo.getId(), InstagramApi.INSTAGRAM_CLIENT_ID, new Callback<MediaCommentsResult>() {
-            @Override
-            public void success(MediaCommentsResult commentsResutl, Response response) {
-              Log.e(TAG, "instagramApi.getMediaComments returns : " + commentsResutl.getData().size());
-              FragmentManager fm = ((Activity) getContext()).getFragmentManager();
-              String title = null;
-              if(null != photo.getCaption()) {
-                title = photo.getCaption().getText();
-              } else {
-                title = "Comments";
-              }
-              CommentsDialogFragment diag = CommentsDialogFragment.newInstance(commentsResutl.getData(), title);
-              diag.show(fm, "Comments");
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-              Log.e(TAG, "Failed to call instagramApi.getMediaComments, error : " + retrofitError.getLocalizedMessage());
-            }
-          });
-        }
-      });
       viewHolder.recentComments = (ListView) convertView.findViewById(R.id.lvRecentComments);
       viewHolder.recentComments.setDivider(null);
       CommentAdapter commentAdapter = new CommentAdapter(getContext(), new ArrayList<Comment>());
@@ -103,6 +83,13 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
       viewHolder.authorImage.setImageURI(Uri.parse("res:///" + R.drawable.default_profile_image));
     }
 
+    if(null != photo.getCaption()) {
+      viewHolder.caption.setVisibility(View.VISIBLE);
+      viewHolder.caption.setText(photo.getCaption().getText());
+    } else {
+      viewHolder.caption.setVisibility(View.GONE);
+    }
+
     viewHolder.postImage.setImageURI(Uri.parse(photo.getImages().getStandard_resolution().getUrl()));
 
     viewHolder.postTime.setText(Utils.toRelativeTime(photo.getCreated_time()));
@@ -112,6 +99,34 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     viewHolder.likes.setText(Utils.formatInt(photo.getLikes().getCount()) + " likes");
 
     viewHolder.commentNum.setText("View all " + Utils.formatInt(photo.getComments().getCount()) + " comments");
+    viewHolder.commentNum.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        instagramApi.getMediaComments(photo.getId(), InstagramApi.INSTAGRAM_CLIENT_ID, new Callback<MediaCommentsResult>() {
+          @Override
+          public void success(MediaCommentsResult commentsResutl, Response response) {
+            Log.e(TAG, "instagramApi.getMediaComments returns : " + commentsResutl.getData().size());
+            FragmentManager fm = ((Activity) getContext()).getFragmentManager();
+            String title = null;
+            if (null != photo.getCaption()) {
+              title = photo.getCaption().getText();
+            } else {
+              title = "Comments";
+            }
+            CommentsDialogFragment diag = CommentsDialogFragment.newInstance(commentsResutl.getData(), title);
+            if (diag.getDialog() != null) {
+              diag.getDialog().setCanceledOnTouchOutside(true); // after fragment has already dialog, i. e. in onCreateView()
+            }
+            diag.show(fm, "Comments");
+          }
+
+          @Override
+          public void failure(RetrofitError retrofitError) {
+            Log.e(TAG, "Failed to call instagramApi.getMediaComments, error : " + retrofitError.getLocalizedMessage());
+          }
+        });
+      }
+    });
 
     CommentAdapter commentAdapter = (CommentAdapter) viewHolder.recentComments.getAdapter();
     commentAdapter.clear();

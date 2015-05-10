@@ -63,7 +63,7 @@ public class CommentsDialogFragment extends DialogFragment {
     CommentAdapter commentAdapter = new CommentAdapter(getActivity(), comments);
     lvComments.setAdapter(commentAdapter);
 
-    return new AlertDialog.Builder(getActivity())
+    Dialog dialog = new AlertDialog.Builder(getActivity())
             .setView(view)
             .setTitle(getArguments().getString(KEY_TITLE))
             .setCancelable(true)
@@ -75,5 +75,7 @@ public class CommentsDialogFragment extends DialogFragment {
                     }
             )
             .create();
+
+    return dialog;
   }
 }
