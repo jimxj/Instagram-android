@@ -39,12 +39,12 @@ public class Likes {
   private Integer count;
 
   
-  private List<Photo> data;
+  private List<From> data;
 
   public Integer getCount() {
     return count;
   }
-  public List<Photo> getData() {
+  public List<From> getData() {
     return data;
   }
 
@@ -65,7 +65,7 @@ public class Likes {
       toBuild.count = value;
       return this;
     }
-    public LikesBuilder data(List<Photo> value) {
+    public LikesBuilder data(List<From> value) {
       toBuild.data = value;
       return this;
     }

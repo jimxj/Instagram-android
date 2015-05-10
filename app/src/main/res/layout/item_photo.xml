@@ -156,6 +156,74 @@
             android:id="@+id/ivHeart"
             android:src="@drawable/like_heart"/>
 
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivHeart"
+            android:layout_toEndOf="@+id/ivHeart"
+            fresco:roundAsCircle="true"
+            fresco:roundedCornerRadius="14dp"
+            fresco:roundingBorderWidth="1dp"
+            android:id="@+id/ivLikeUser1"
+            fresco:placeholderImage="@drawable/default_profile_image"
+            />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivLikeUser1"
+            android:layout_toEndOf="@+id/ivLikeUser1"
+            fresco:roundAsCircle="true"
+            fresco:roundedCornerRadius="14dp"
+            fresco:roundingBorderWidth="1dp"
+            android:id="@+id/ivLikeUser2"
+            fresco:placeholderImage="@drawable/default_profile_image"
+            />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivLikeUser2"
+            android:layout_toEndOf="@+id/ivLikeUser2"
+            fresco:roundAsCircle="true"
+            fresco:roundedCornerRadius="14dp"
+            fresco:roundingBorderWidth="1dp"
+            android:id="@+id/ivLikeUser3"
+            fresco:placeholderImage="@drawable/default_profile_image"
+            />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ivLikeUser3"
+            android:layout_toEndOf="@+id/ivLikeUser3"
+            fresco:roundAsCircle="true"
+            fresco:roundedCornerRadius="14dp"
+            fresco:roundingBorderWidth="1dp"
+            android:id="@+id/ivLikeUser4"
+            fresco:placeholderImage="@drawable/default_profile_image"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -165,8 +233,8 @@
             android:paddingLeft="10dp"
             android:layout_gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/ivHeart"
-            android:layout_toEndOf="@+id/ivHeart"/>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <ListView

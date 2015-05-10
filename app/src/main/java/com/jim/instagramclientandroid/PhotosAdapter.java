@@ -27,6 +27,7 @@ import com.jim.instagramclientandroid.api.model.beans.Photo;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit.Callback;
@@ -46,7 +47,11 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     TextView commentNum;
     ListView recentComments;
     ImageView payIcon;
-    VideoView videoView;
+    List<SimpleDraweeView> likeUserImages = new ArrayList<>(4);
+//    SimpleDraweeView likeUser1;
+//    SimpleDraweeView likeUser2;
+//    SimpleDraweeView likeUser3;
+//    SimpleDraweeView likeUser4;
   }
 
   private InstagramApi instagramApi;
@@ -76,6 +81,10 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
       CommentAdapter commentAdapter = new CommentAdapter(getContext(), new ArrayList<Comment>());
       viewHolder.recentComments.setAdapter(commentAdapter);
       viewHolder.payIcon = (ImageView) convertView.findViewById(R.id.ivPlay);
+      viewHolder.likeUserImages.add((SimpleDraweeView) convertView.findViewById(R.id.ivLikeUser1));
+      viewHolder.likeUserImages.add((SimpleDraweeView) convertView.findViewById(R.id.ivLikeUser2));
+      viewHolder.likeUserImages.add((SimpleDraweeView) convertView.findViewById(R.id.ivLikeUser3));
+      viewHolder.likeUserImages.add((SimpleDraweeView) convertView.findViewById(R.id.ivLikeUser4));
       //viewHolder.videoView = (VideoView) convertView.findViewById(R.id.vvVideo);
 
       convertView.setTag(viewHolder);
@@ -131,6 +140,17 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
         });
       }
     });
+
+    int likeUserNumToShow = photo.getLikes().getData().size() > 4 ? 4 : photo.getLikes().getData().size();
+    for(int i = 0; i < likeUserNumToShow; i++) {
+      viewHolder.likeUserImages.get(i).setImageURI(Uri.parse(photo.getLikes().getData().get(i).getProfile_picture()));
+      viewHolder.likeUserImages.get(i).setVisibility(View.VISIBLE);
+    }
+    if(likeUserNumToShow < 4) {
+      for(int i = likeUserNumToShow; i <= 4; i++) {
+        viewHolder.likeUserImages.get(i).setVisibility(View.GONE);
+      }
+    }
 
     //viewHolder.videoView.setVisibility(View.GONE);
     if(photo.getType().equals("video")) {
