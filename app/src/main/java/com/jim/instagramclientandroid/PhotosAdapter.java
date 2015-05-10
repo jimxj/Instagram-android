@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jim.instagramclientandroid.api.InstagramApi;
@@ -42,6 +45,8 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     TextView likes;
     TextView commentNum;
     ListView recentComments;
+    ImageView payIcon;
+    VideoView videoView;
   }
 
   private InstagramApi instagramApi;
@@ -55,9 +60,8 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
   public View getView(int position, View convertView, ViewGroup parent) {
     final Photo photo = getItem(position);
 
-    ViewHolder viewHolder = null;
+    final ViewHolder viewHolder = null == convertView ? new ViewHolder() :  (ViewHolder) convertView.getTag();
     if(null == convertView) {
-      viewHolder = new ViewHolder();
       convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
 
       viewHolder.caption = (TextView) convertView.findViewById(R.id.tvCaption);
@@ -71,10 +75,10 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
       viewHolder.recentComments.setDivider(null);
       CommentAdapter commentAdapter = new CommentAdapter(getContext(), new ArrayList<Comment>());
       viewHolder.recentComments.setAdapter(commentAdapter);
+      viewHolder.payIcon = (ImageView) convertView.findViewById(R.id.ivPlay);
+      //viewHolder.videoView = (VideoView) convertView.findViewById(R.id.vvVideo);
 
       convertView.setTag(viewHolder);
-    } else {
-      viewHolder = (ViewHolder) convertView.getTag();
     }
 
     if(null != photo.getUser().getProfile_picture()){
@@ -105,7 +109,7 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
         instagramApi.getMediaComments(photo.getId(), InstagramApi.INSTAGRAM_CLIENT_ID, new Callback<MediaCommentsResult>() {
           @Override
           public void success(MediaCommentsResult commentsResutl, Response response) {
-            Log.e(TAG, "instagramApi.getMediaComments returns : " + commentsResutl.getData().size());
+            Log.d(TAG, "instagramApi.getMediaComments returns : " + commentsResutl.getData().size());
             FragmentManager fm = ((Activity) getContext()).getFragmentManager();
             String title = null;
             if (null != photo.getCaption()) {
@@ -127,6 +131,29 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
         });
       }
     });
+
+    //viewHolder.videoView.setVisibility(View.GONE);
+    if(photo.getType().equals("video")) {
+      viewHolder.payIcon.setVisibility(View.VISIBLE);
+      viewHolder.payIcon.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          FragmentManager fm = ((Activity) getContext()).getFragmentManager();
+          VideoDialogFragment diag = VideoDialogFragment.newInstance(photo.getVideos().getStandard_resolution().getUrl());
+          if (diag.getDialog() != null) {
+            diag.getDialog().setCanceledOnTouchOutside(true); // after fragment has already dialog, i. e. in onCreateView()
+          }
+          diag.show(fm, null != photo.getCaption() ? photo.getCaption().getText() : "");
+//          viewHolder.videoView.setVisibility(View.VISIBLE);
+//          viewHolder.videoView.setVideoURI(Uri.parse(photo.getVideos().getStandard_resolution().getUrl()));
+//          viewHolder.videoView.setMediaController(new MediaController(getContext()));
+//          viewHolder.videoView.requestFocus();
+//          viewHolder.videoView.start();
+        }
+      });
+    } else {
+      viewHolder.payIcon.setVisibility(View.GONE);
+    }
 
     CommentAdapter commentAdapter = (CommentAdapter) viewHolder.recentComments.getAdapter();
     commentAdapter.clear();

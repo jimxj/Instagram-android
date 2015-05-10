@@ -94,17 +94,45 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"
-        android:id="@+id/ivPhoto"
-        android:layout_below="@+id/tvCaption"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:minHeight="50dp"
-        fresco:placeholderImage="@drawable/image_placeholder"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvCaption"
+        android:id="@+id/rlPhoto">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:id="@+id/ivPhoto"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:minHeight="50dp"
+            fresco:placeholderImage="@drawable/image_placeholder"/>
+
+        <ImageView
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/ivPlay"
+            android:src="@drawable/play_icon"/>
+
+        <!--<VideoView-->
+            <!--android:id="@+id/vvVideo"-->
+            <!--android:background="#0000"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" />-->
+    </RelativeLayout>
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -114,7 +142,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/ivPhoto"
+        android:layout_below="@+id/rlPhoto"
         android:id="@+id/rllikes">
 
         <ImageView
