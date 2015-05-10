@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,45 +39,66 @@ public class CommentsDialogFragment extends DialogFragment {
     return fragment;
   }
 
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setStyle(DialogFragment.STYLE_NORMAL, R.style.FULLSCREEN_WITH_TITLE_DIALOG);
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    Dialog d = getDialog();
+    if (d!=null){
+      int width = ViewGroup.LayoutParams.MATCH_PARENT;
+      int height = ViewGroup.LayoutParams.MATCH_PARENT;
+      d.getWindow().setLayout(width, height);
+
+      d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+    }
+  }
+
   //http://stackoverflow.com/questions/13257038/custom-layout-for-dialogfragment-oncreateview-vs-oncreatedialog
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    super.onCreateView(inflater, container, savedInstanceState);
+
+    View view = inflater.inflate(R.layout.fragement_comments, container);
+    lvComments = (ListView) view.findViewById(R.id.lvComments);
+    lvComments.setDivider(new ColorDrawable(Color.WHITE));
+    lvComments.setDividerHeight(5);
+
+    List<Comment> comments = getArguments().getParcelableArrayList(KEY_COMMENTS);
+    CommentAdapter commentAdapter = new CommentAdapter(getActivity(), comments);
+    lvComments.setAdapter(commentAdapter);
+
+    return view;
+  }
+
 //  @Override
-//  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                           Bundle savedInstanceState) {
-//    super.onCreateView(inflater, container, savedInstanceState);
-//
-//    View view = inflater.inflate(R.layout.fragement_comments, container);
+//  public Dialog onCreateDialog(Bundle savedInstanceState) {
+//    LayoutInflater i = getActivity().getLayoutInflater();
+//    View view = i.inflate(R.layout.fragement_comments, null);
 //    lvComments = (ListView) view.findViewById(R.id.lvComments);
 //
 //    List<Comment> comments = getArguments().getParcelableArrayList(KEY_COMMENTS);
 //    CommentAdapter commentAdapter = new CommentAdapter(getActivity(), comments);
 //    lvComments.setAdapter(commentAdapter);
 //
-//    return view;
+//    Dialog dialog = new AlertDialog.Builder(getActivity())
+//            .setView(view)
+//            .setTitle(getArguments().getString(KEY_TITLE))
+//            .setCancelable(true)
+//            .setPositiveButton("OK",
+//                    new DialogInterface.OnClickListener() {
+//                      public void onClick(DialogInterface dialog, int whichButton) {
+//                        dialog.dismiss();
+//                      }
+//                    }
+//            )
+//            .create();
+//
+//    return dialog;
 //  }
-
-  @Override
-  public Dialog onCreateDialog(Bundle savedInstanceState) {
-    LayoutInflater i = getActivity().getLayoutInflater();
-    View view = i.inflate(R.layout.fragement_comments, null);
-    lvComments = (ListView) view.findViewById(R.id.lvComments);
-
-    List<Comment> comments = getArguments().getParcelableArrayList(KEY_COMMENTS);
-    CommentAdapter commentAdapter = new CommentAdapter(getActivity(), comments);
-    lvComments.setAdapter(commentAdapter);
-
-    Dialog dialog = new AlertDialog.Builder(getActivity())
-            .setView(view)
-            .setTitle(getArguments().getString(KEY_TITLE))
-            .setCancelable(true)
-            .setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
-                      public void onClick(DialogInterface dialog, int whichButton) {
-                        dialog.dismiss();
-                      }
-                    }
-            )
-            .create();
-
-    return dialog;
-  }
 }
