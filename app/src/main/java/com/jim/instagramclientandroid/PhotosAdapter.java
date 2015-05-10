@@ -3,6 +3,8 @@
  */
 package com.jim.instagramclientandroid;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -14,13 +16,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jim.instagramclientandroid.api.InstagramApi;
 import com.jim.instagramclientandroid.api.model.beans.Comment;
+import com.jim.instagramclientandroid.api.model.beans.MediaCommentsResult;
 import com.jim.instagramclientandroid.api.model.beans.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class PhotosAdapter extends ArrayAdapter<Photo> {
+  public static final String TAG = "PhotosAdapter";
   // View lookup cache
   private static class ViewHolder {
     SimpleDraweeView authorImage;
@@ -32,14 +41,16 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
     ListView recentComments;
   }
 
+  private InstagramApi instagramApi;
 
-  public PhotosAdapter(Context context, List<Photo> objects) {
+  public PhotosAdapter(Context context, List<Photo> objects, InstagramApi instagramApi) {
     super(context, R.layout.item_photo, objects);
+    this.instagramApi = instagramApi;
   }
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    Photo photo = getItem(position);
+    final Photo photo = getItem(position);
 
     ViewHolder viewHolder = null;
     if(null == convertView) {
@@ -51,6 +62,31 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
       viewHolder.postImage = (SimpleDraweeView) convertView.findViewById(R.id.ivPhoto);
       viewHolder.likes = (TextView) convertView.findViewById(R.id.tvLikeNum);
       viewHolder.commentNum = (TextView) convertView.findViewById(R.id.tvViewAllComments);
+      viewHolder.commentNum.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          instagramApi.getMediaComments(photo.getId(), InstagramApi.INSTAGRAM_CLIENT_ID, new Callback<MediaCommentsResult>() {
+            @Override
+            public void success(MediaCommentsResult commentsResutl, Response response) {
+              Log.e(TAG, "instagramApi.getMediaComments returns : " + commentsResutl.getData().size());
+              FragmentManager fm = ((Activity) getContext()).getFragmentManager();
+              String title = null;
+              if(null != photo.getCaption()) {
+                title = photo.getCaption().getText();
+              } else {
+                title = "Comments";
+              }
+              CommentsDialogFragment diag = CommentsDialogFragment.newInstance(commentsResutl.getData(), title);
+              diag.show(fm, "Comments");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+              Log.e(TAG, "Failed to call instagramApi.getMediaComments, error : " + retrofitError.getLocalizedMessage());
+            }
+          });
+        }
+      });
       viewHolder.recentComments = (ListView) convertView.findViewById(R.id.lvRecentComments);
       viewHolder.recentComments.setDivider(null);
       CommentAdapter commentAdapter = new CommentAdapter(getContext(), new ArrayList<Comment>());
@@ -73,7 +109,7 @@ public class PhotosAdapter extends ArrayAdapter<Photo> {
 
     viewHolder.userName.setText(photo.getUser().getUsername());
 
-    viewHolder.likes.setText(Utils.formatInt(photo.getLikes().getCount()));
+    viewHolder.likes.setText(Utils.formatInt(photo.getLikes().getCount()) + " likes");
 
     viewHolder.commentNum.setText("View all " + Utils.formatInt(photo.getComments().getCount()) + " comments");
 

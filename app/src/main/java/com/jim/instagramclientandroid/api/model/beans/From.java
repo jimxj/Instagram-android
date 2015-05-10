@@ -6,6 +6,11 @@
 package com.jim.instagramclientandroid.api.model.beans;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Generated from json example
 {
@@ -17,7 +22,7 @@ package com.jim.instagramclientandroid.api.model.beans;
 
  */
 
-public class From {
+public class From implements Parcelable {
 
   
   private String full_name;
@@ -42,6 +47,28 @@ public class From {
   }
   public String getUsername() {
     return username;
+  }
+
+  public From() {}
+
+  public From(Parcel in) {
+    this.full_name = in.readString();
+    this.id = in.readString();
+    this.profile_picture = in.readString();
+    this.username = in.readString();
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeString(full_name);
+    parcel.writeString(id);
+    parcel.writeString(profile_picture);
+    parcel.writeString(username);
   }
 
   /**

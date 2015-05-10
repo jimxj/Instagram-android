@@ -5,7 +5,10 @@
 
 package com.jim.instagramclientandroid.api.model.beans;
 
-public class Comment {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Comment implements Parcelable {
 
   private From from;
 
@@ -28,6 +31,28 @@ public class Comment {
   }
   public String getText() {
     return text;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  public Comment() {}
+
+  Comment(Parcel in) {
+    this.from = in.readParcelable(this.getClass().getClassLoader());
+    this.id = in.readString();
+    this.created_time = in.readString();
+    this.text = in.readString();
+  }
+
+  @Override
+  public void writeToParcel(Parcel parcel, int i) {
+    parcel.writeParcelable(from, i);
+    parcel.writeString(id);
+    parcel.writeString(created_time);
+    parcel.writeString(text);
   }
 
   /**

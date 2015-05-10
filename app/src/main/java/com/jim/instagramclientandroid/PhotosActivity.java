@@ -26,7 +26,7 @@ import retrofit.client.Response;
 
 
 public class PhotosActivity extends ActionBarActivity {
-  public static final String INSTAGRAM_CLIENT_ID = "dac6dad78dae4fac9c89f1df2b094bf9";
+
   public static final String TAG = "PhotosActivity";
   private RestAdapter restAdapter;
   private InstagramApi instagramApi;
@@ -47,6 +47,15 @@ public class PhotosActivity extends ActionBarActivity {
     ButterKnife.inject(this);
     Fresco.initialize(this);
 
+    restAdapter = new RestAdapter.Builder()
+            .setEndpoint("https://api.instagram.com/v1")
+            .build();
+
+    instagramApi = restAdapter.create(InstagramApi.class);
+
+    photosAdapter = new PhotosAdapter(this, new ArrayList<Photo>(), instagramApi);
+    mLvPhotos.setAdapter(photosAdapter);
+
     // Setup refresh listener which triggers new data loading
     swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
@@ -63,20 +72,12 @@ public class PhotosActivity extends ActionBarActivity {
             android.R.color.holo_orange_light,
             android.R.color.holo_red_light);
 
-    photosAdapter = new PhotosAdapter(this, new ArrayList<Photo>());
-    mLvPhotos.setAdapter(photosAdapter);
-
-    restAdapter = new RestAdapter.Builder()
-            .setEndpoint("https://api.instagram.com/v1")
-            .build();
-
-    instagramApi = restAdapter.create(InstagramApi.class);
 
     fetchPhotosAsync(0);
   }
 
   private void fetchPhotosAsync(long id) {
-    instagramApi.getPopularMedias(INSTAGRAM_CLIENT_ID, new Callback<PopularMediasResult>() {
+    instagramApi.getPopularMedias(InstagramApi.INSTAGRAM_CLIENT_ID, new Callback<PopularMediasResult>() {
       @Override
       public void success(PopularMediasResult popularMediasResult, Response response) {
         Log.d(TAG, "Got popular medias : " + popularMediasResult);
