@@ -6,8 +6,8 @@ An Android Instagram client
 ## User Storeis
 * User can scroll through current popular photos from Instagram
 * For each photo displayed, user can see the following details:
-> Graphic, Caption, Username
-> (Optional) relative timestamp, like count, user profile image
+  * Graphic, Caption, Username
+  * (Optional) relative timestamp, like count, user profile image
 * Advanced: Add pull-to-refresh for popular stream with SwipeRefreshLayout
 * Advanced: Show latest comment for each photo (bonus: show last 2 comments)
 * Advanced: Display each photo with the same style and proportions as the real Instagram (see screens below)
