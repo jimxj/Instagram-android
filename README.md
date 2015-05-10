@@ -16,3 +16,6 @@ An Android Instagram client
 * [X] Advanced: Improve the user interface through styling and coloring
 * [X] Bonus: Allow user to view all comments for an image within a separate activity or dialog fragment
 * [X] Bonus: Allow video posts to be played in full-screen using the VideoView
+
+##GIF walkthrough
+![Demo](demo.gif)
