@@ -17,14 +17,12 @@
         <com.facebook.drawee.view.SimpleDraweeView
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_marginLeft="5dp"
             fresco:roundAsCircle="true"
-            fresco:roundedCornerRadius="10dp"
-            fresco:roundingBorderWidth="1dp"
+            fresco:roundedCornerRadius="14dp"
+            fresco:roundingBorderWidth="14dp"
             android:id="@+id/ivCommentUserImage"
             fresco:placeholderImage="@drawable/default_profile_image"
             />
